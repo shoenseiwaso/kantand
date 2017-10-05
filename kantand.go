@@ -10,15 +10,18 @@ import (
 func main() {
 	// options with their defaults
 	options := struct{
-		bindTo string
+		host string
+		port uint
 		wwwRoot string
 	}{
-		bindTo: ":8000",
+		host: "",
+		port: 8000,
 		wwwRoot: ".",
 	}
 
 	// parse command line options
-	flag.StringVar(&options.bindTo, "bind", options.bindTo, "Host and port to bind to")
+	flag.StringVar(&options.host, "host", options.host, "Hostname or IP to bind to (empty string for all IPs on this host)")
+	flag.UintVar(&options.port, "p", options.port, "Port to bind to")
 	flag.StringVar(&options.wwwRoot, "www", options.wwwRoot, "Directory to serve")
 	showHelp := flag.Bool("h", false, "Display help text")
 
@@ -29,7 +32,9 @@ func main() {
 		return
 	}
 
+	bindTo := fmt.Sprintf("%v:%d", options.host, options.port)
+
 	// serve the selected directory
-	fmt.Printf("Serving directory '%v' via HTTP on '%v'.\n", options.wwwRoot, options.bindTo)
-	log.Fatal(http.ListenAndServe(options.bindTo, http.FileServer(http.Dir(options.wwwRoot))))
+	fmt.Printf("Serving directory '%v' via HTTP on '%v'.\n", options.wwwRoot, bindTo)
+	log.Fatal(http.ListenAndServe(bindTo, http.FileServer(http.Dir(options.wwwRoot))))
 }
