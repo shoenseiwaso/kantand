@@ -10,7 +10,7 @@ The name `kantand` was chosen to be easy enough to type, and because in Japanese
 To install:
 
 ```sh
-$ go install github.com/shoenseiwaso/kantand
+$ go get github.com/shoenseiwaso/kantand
 ```
 
 To run, assuming `$GOPATH/bin` is in your `$PATH`:
