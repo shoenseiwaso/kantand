@@ -34,7 +34,6 @@ Usage of kantand:
     	Port to bind to (default 8000)
   -www string
     	Directory to serve (default ".")
-
 ```
 
 ## Licence
