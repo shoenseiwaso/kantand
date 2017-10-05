@@ -22,7 +22,7 @@ Serving directory '.' via HTTP on ':8000'.
 
 To quit, press `CTRL+C`.
 
-A safe option would be to bind only to localhost:
+A safer option would be to bind only to localhost:
 
 ```sh
 $ kantand -host localhost
