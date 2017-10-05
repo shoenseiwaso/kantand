@@ -20,6 +20,8 @@ $ kantand
 Serving directory '.' via HTTP on 'localhost:8000'.
 ```
 
+To quit, press `CTRL+C`.
+
 Optional parameters:
 
 ```sh
