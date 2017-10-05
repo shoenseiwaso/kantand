@@ -22,8 +22,11 @@ func main() {
 	flag.StringVar(&options.wwwRoot, "www", options.wwwRoot, "Directory to serve")
 	showHelp := flag.Bool("h", false, "Display help text")
 
+	flag.Parse()
+
 	if(*showHelp) {
 		flag.Usage()
+		return
 	}
 
 	// serve the selected directory
