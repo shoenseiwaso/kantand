@@ -27,11 +27,14 @@ Optional parameters:
 ```sh
 $ kantand -h
 Usage of kantand:
-  -bind string
-    	Host and port to bind to (default ":8000")
   -h	Display help text
+  -host string
+    	Hostname or IP to bind to (empty string for all IPs on this host)
+  -p uint
+    	Port to bind to (default 8000)
   -www string
     	Directory to serve (default ".")
+
 ```
 
 ## Licence
