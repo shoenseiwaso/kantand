@@ -17,10 +17,17 @@ To run, assuming `$GOPATH/bin` is in your `$PATH`:
 
 ```sh
 $ kantand
-Serving directory '.' via HTTP on 'localhost:8000'.
+Serving directory '.' via HTTP on ':8000'.
 ```
 
 To quit, press `CTRL+C`.
+
+A safe option would be to bind only to localhost:
+
+```sh
+$ kantand -host localhost
+Serving directory '.' via HTTP on 'localhost:8000'.
+```
 
 Optional parameters:
 
