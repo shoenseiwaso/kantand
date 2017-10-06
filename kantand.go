@@ -1,21 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
 	// options with their defaults
-	options := struct{
-		host string
-		port uint
+	options := struct {
+		host    string
+		port    uint
 		wwwRoot string
 	}{
-		host: "",
-		port: 8000,
+		host:    "",
+		port:    8000,
 		wwwRoot: ".",
 	}
 
@@ -27,7 +27,7 @@ func main() {
 
 	flag.Parse()
 
-	if(*showHelp) {
+	if *showHelp {
 		flag.Usage()
 		return
 	}
