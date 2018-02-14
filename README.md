@@ -29,16 +29,33 @@ $ kantand -host localhost
 Serving directory '.' via HTTP on 'localhost:8000'.
 ```
 
+With TLS/SSL using Let's Encrypt (requires an internet-visible hostname):
+
+```sh
+$ kantand -host test.example.com -sslenable -sslletsencrypt
+```
+
 Optional parameters:
 
 ```sh
 $ kantand -h
-Usage of kantand:
-  -h	Display help text
+Usage of ./kantand:
   -host string
     	Hostname or IP to bind to (empty string for all IPs on this host)
   -p uint
     	Port to bind to (default 8000)
+  -redirecthttp
+    	Redirect HTTP request to HTTPS (default true)
+  -sslcert string
+    	TLS/SSL Certificate file
+  -sslenable
+    	Enable TLS/SSL (HTTPS)
+  -sslkey string
+    	TLS/SSL Key file
+  -sslletsencrypt
+    	Use Let's Encrypt for TLS/SSL certificate issuance and renewal
+  -sslport uint
+    	TLS/SSL port to listen on (default 8043)
   -www string
     	Directory to serve (default ".")
 ```
