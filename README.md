@@ -39,7 +39,7 @@ Optional parameters:
 
 ```sh
 $ kantand -h
-Usage of ./kantand:
+Usage of kantand:
   -host string
     	Hostname or IP to bind to (empty string for all IPs on this host)
   -p uint
@@ -54,6 +54,8 @@ Usage of ./kantand:
     	TLS/SSL Key file
   -sslletsencrypt
     	Use Let's Encrypt for TLS/SSL certificate issuance and renewal
+  -sslletsencryptcerts string
+    	Let's Encrypt certificate cache directory (default "certs")
   -sslport uint
     	TLS/SSL port to listen on (default 8043)
   -www string

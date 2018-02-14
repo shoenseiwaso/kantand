@@ -22,25 +22,27 @@ func redirectTLS(w http.ResponseWriter, r *http.Request) {
 func main() {
 	// options with their defaults
 	options := struct {
-		host    string
-		port    uint
-		wwwRoot string
-		sslEnable bool
-		sslLetsEncrypt bool
-		sslPort uint
-		redirectHTTP bool
-		sslCert string
-		sslKey string
+		host                string
+		port                uint
+		wwwRoot             string
+		sslEnable           bool
+		sslLetsEncrypt      bool
+		sslPort             uint
+		redirectHTTP        bool
+		sslCert             string
+		sslKey              string
+		sslLetsEncryptCerts string
 	}{
-		host:    "",
-		port:    8000,
-		wwwRoot: ".",
-		sslEnable: false,
-		sslLetsEncrypt: false,
-		sslPort: 8043,
-		redirectHTTP: true,
-		sslCert: "",
-		sslKey: "",
+		host:                "",
+		port:                8000,
+		wwwRoot:             ".",
+		sslEnable:           false,
+		sslLetsEncrypt:      false,
+		sslPort:             8043,
+		redirectHTTP:        true,
+		sslCert:             "",
+		sslKey:              "",
+		sslLetsEncryptCerts: "certs",
 	}
 
 	// parse command line options
@@ -53,6 +55,7 @@ func main() {
 	flag.BoolVar(&options.redirectHTTP, "redirecthttp", options.redirectHTTP, "Redirect HTTP request to HTTPS")
 	flag.StringVar(&options.sslCert, "sslcert", options.sslCert, "TLS/SSL Certificate file")
 	flag.StringVar(&options.sslKey, "sslkey", options.sslKey, "TLS/SSL Key file")
+	flag.StringVar(&options.sslLetsEncryptCerts, "sslletsencryptcerts", options.sslLetsEncryptCerts, "Let's Encrypt certificate cache directory")
 
 	flag.Parse()
 
@@ -82,7 +85,7 @@ func main() {
 			certManager := autocert.Manager{
 				Prompt:     autocert.AcceptTOS,
 				HostPolicy: autocert.HostWhitelist(options.host),
-				Cache:      autocert.DirCache("certs"), // folder for storing certificates
+				Cache:      autocert.DirCache(options.sslLetsEncryptCerts), // folder for storing certificates
 			}
 
 			server.TLSConfig = &tls.Config{
