@@ -67,17 +67,6 @@ func main() {
 	server := &http.Server{}
 
 	if options.sslEnable {
-		// optionally redirect all traffic on HTTP port to HTTPS (SSL/TLS) port
-		if options.redirectHTTP {
-			fmt.Printf("Redirecting all HTTP traffic sent to '%v' to HTTPS at '%v'\n", bindTo, bindToSSL)
-
-			go func() {
-				if err := http.ListenAndServe(bindTo, http.HandlerFunc(redirectTLS)); err != nil {
-					log.Fatalf("ListenAndServe error: %v", err)
-				}
-			}()
-		}
-
 		server.Addr = bindToSSL
 
 		if options.sslLetsEncrypt {
@@ -86,6 +75,25 @@ func main() {
 				Prompt:     autocert.AcceptTOS,
 				HostPolicy: autocert.HostWhitelist(options.host),
 				Cache:      autocert.DirCache(options.sslLetsEncryptCerts), // folder for storing certificates
+			}
+
+			// optionally redirect all traffic on HTTP port to HTTPS (SSL/TLS) port
+			if options.redirectHTTP {
+				fmt.Printf("Redirecting all HTTP traffic sent to '%v' to HTTPS at '%v'\n", bindTo, bindToSSL)
+
+				go func() {
+					// wrap redirect handler in certManager's HTTP handler to support http-01 challenges
+					if err := http.ListenAndServe(bindTo, certManager.HTTPHandler(http.HandlerFunc(redirectTLS))); err != nil {
+						log.Fatalf("ListenAndServe error: %v", err)
+					}
+				}()
+			} else {
+				go func() {
+					// launch server on port :80 anyway with certManager's HTTP handler to support http-01 challenges
+					if err := http.ListenAndServe(bindTo, certManager.HTTPHandler(nil)); err != nil {
+						log.Fatalf("ListenAndServe error: %v", err)
+					}
+				}()
 			}
 
 			server.TLSConfig = &tls.Config{
@@ -97,6 +105,18 @@ func main() {
 			log.Fatal(server.ListenAndServeTLS("", "")) // key and cert are comming from Let's Encrypt
 		} else {
 			// serve via HTTPS with static certficate
+
+			// optionally redirect all traffic on HTTP port to HTTPS (SSL/TLS) port
+			if options.redirectHTTP {
+				fmt.Printf("Redirecting all HTTP traffic sent to '%v' to HTTPS at '%v'\n", bindTo, bindToSSL)
+	
+				go func() {
+					if err := http.ListenAndServe(bindTo, http.HandlerFunc(redirectTLS)); err != nil {
+						log.Fatalf("ListenAndServe error: %v", err)
+					}
+				}()
+			}
+
 			fmt.Printf("TLS/SSL web server started at '%v' serving directory '%v'\n", bindToSSL, options.wwwRoot)
 
 			log.Fatal(server.ListenAndServeTLS(options.sslCert, options.sslKey))
